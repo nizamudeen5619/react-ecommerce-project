@@ -16,4 +16,6 @@ const MenuItem = ({ title, imageUrl, size, history, linkUrl,match }) => (
     </div>
 );
 
-export default withRouter(MenuItem);//to access history,match
+export default withRouter(MenuItem);
+//Higher Order Component -> transforms the component into another
+//to access history,match
