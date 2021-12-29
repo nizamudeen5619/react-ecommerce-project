@@ -56,7 +56,7 @@ class Directory extends Component {
         )
     }
 }
-                    /* this.state.sections.map(({ title, imageUrl, id, size, linkUrl }) => (
-                        <MenuItem key={id} title={title} imageUrl={imageUrl} size={size}  linkUrl={linkUrl}/>
-                    )) */
+/* this.state.sections.map(({ title, imageUrl, id, size, linkUrl }) => (
+    <MenuItem key={id} title={title} imageUrl={imageUrl} size={size}  linkUrl={linkUrl}/>
+)) */
 export default Directory;
