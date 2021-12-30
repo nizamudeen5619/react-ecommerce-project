@@ -12,6 +12,28 @@ const firebaseConfig = {
     measurementId: "G-TDDBN61WLK"
 };
 
+export const createUserProfileDocument=async(userAuth,additionalData)=>{
+    if(!userAuth) return;
+    const userRef=firestore.doc(`users/${userAuth.uid}`)//referrence of user
+    const snapShot=await userRef.get()//get snapshot of data
+    if(!snapShot.exists){//if data not found
+        const {displayName,email}=userAuth
+        const createdAt=new Date();
+
+        try{
+            await userRef.set({//create data
+                displayName,
+                email,createdAt,
+                ...additionalData
+            })
+        }
+        catch(error){
+            console.log('error creating user',error.message);
+        }
+    }
+    return userRef;
+}
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
