@@ -30,7 +30,6 @@ class App extends Component {
               ...snapshot.data()//gives the data of the user logged in
             }
           });
-          console.log(this.state);
         });
       }
       else {
