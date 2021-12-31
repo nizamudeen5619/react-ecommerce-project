@@ -1,39 +1,36 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import Header from './components/header/header.component';
 import SignInSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
+
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import { setCurrentUser } from './redux/user/user.actions';
 
 import './App.css';
 
 class App extends Component {
 
-  constructor() {
-    super()
-    this.state = {
-      currentUser: null
-    }
-  }
+
   unsubscribeFromAuth = null
   componentDidMount() {
+  const {setCurrentUser}= this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {//check if user signed in
         //create user if does not exists or get user data and update state
         const userRef = await createUserProfileDocument(userAuth);
-        userRef.onSnapshot(snapshot => {
-          this.setState({
-            currentUser: {
-              id: snapshot.id,
-              ...snapshot.data()//gives the data of the user logged in
-            }
-          });
+        userRef.onSnapshot(snapshot => {//whenever user Snapshot updates dispatching setCurrentUser action is dispatched
+          setCurrentUser({
+            id:snapshot.id,
+            ...snapshot.data()
+          })
         });
       }
       else {
-        this.setState({ currentUser: userAuth })
+        setCurrentUser(userAuth)
       }
     })
   }
@@ -45,7 +42,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         <Switch>
           <Route exact path='/' component={HomePage} />
           <Route path='/shop' component={ShopPage} />
@@ -67,4 +64,9 @@ line 24: unsubscribeFromAuth is reassigned to the return value of calling auth.o
 line 32: so when unsubscribeFromAuth() is called inside the componentWillUnmount, it now has the value of firebase.unsubscribe(), which executes, closing the session.
 
 */
-export default App;
+
+const mapDispatchToPass = (dispatch) => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))//dispatches action object by invoking setCurrentUser from user.actions
+})
+
+export default connect(null, mapDispatchToPass)(App);//only setUser and no need for user here so null
