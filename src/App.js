@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Component } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import HomePage from './pages/homepage/homepage.component';
@@ -14,17 +14,17 @@ import './App.css';
 
 class App extends Component {
 
-
   unsubscribeFromAuth = null
+
   componentDidMount() {
-  const {setCurrentUser}= this.props;
+    const { setCurrentUser } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {//check if user signed in
         //create user if does not exists or get user data and update state
         const userRef = await createUserProfileDocument(userAuth);
         userRef.onSnapshot(snapshot => {//whenever user Snapshot updates dispatching setCurrentUser action is dispatched
           setCurrentUser({
-            id:snapshot.id,
+            id: snapshot.id,
             ...snapshot.data()
           })
         });
@@ -46,7 +46,12 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={HomePage} />
           <Route path='/shop' component={ShopPage} />
-          <Route path='/signin' component={SignInSignUpPage} />
+          <Route
+            exact
+            path='/signin'
+            render={
+              () => this.props.currentUser ? (<Redirect exact to='/' />) : (<SignInSignUpPage />)
+            } />
         </Switch>
       </div>
     );
@@ -65,8 +70,12 @@ line 32: so when unsubscribeFromAuth() is called inside the componentWillUnmount
 
 */
 
+const mapStateToProps = ({ user }) => ({//get user from store state and store it in props
+  currentUser: user.currentUser
+})
+
 const mapDispatchToPass = (dispatch) => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))//dispatches action object by invoking setCurrentUser from user.actions
 })
 
-export default connect(null, mapDispatchToPass)(App);//only setUser and no need for user here so null
+export default connect(mapStateToProps, mapDispatchToPass)(App);
