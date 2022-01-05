@@ -1,14 +1,17 @@
 import { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import Header from './components/header/header.component';
 import SignInSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
+import CheckoutPage from './pages/checkout/checkout.component';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { setCurrentUser } from './redux/user/user.actions';
+import { selectCurrentUser } from './redux/user/user.selectors';
 
 import './App.css';
 
@@ -46,6 +49,7 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={HomePage} />
           <Route path='/shop' component={ShopPage} />
+          <Route exact path='/checkout' component={CheckoutPage} />
           <Route
             exact
             path='/signin'
@@ -70,8 +74,8 @@ line 32: so when unsubscribeFromAuth() is called inside the componentWillUnmount
 
 */
 
-const mapStateToProps = ({ user }) => ({//get user from store state and store it in props
-  currentUser: user.currentUser
+const mapStateToProps = createStructuredSelector({//get user from store state and store it in props auto
+  currentUser: selectCurrentUser
 })
 
 const mapDispatchToPass = (dispatch) => ({
