@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 
 import { clearItemFromCart, removeItem, addItem } from '../../redux/cart/cart.actions';
 
