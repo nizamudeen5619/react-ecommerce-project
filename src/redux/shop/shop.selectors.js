@@ -11,11 +11,11 @@ export const selectShopCollections = createSelector(
 export const selectCollectionsForPreview=createSelector(
     [selectShopCollections],
         [selectShopCollections],
-    collections=> Object.values(collections)//convert object of objects into array of objects 
+    collections=> collections?Object.values(collections):[]//convert object of objects into array of objects 
 )
 
 export const selectCollection = memoize((collectionUrlParam) =>//use hash tables instead of array
     createSelector(
         [selectShopCollections],
-        collections => collections[collectionUrlParam]
+        collections => collections?collections[collectionUrlParam]:null
     )) 
