@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 
@@ -9,23 +9,18 @@ import { fetchCollectionStart } from '../../redux/shop/shop.actions';
 
 import './shop.styles.scss'
 
-
-class ShopPage extends Component {
-
-    componentDidMount() {
-        const { fetchCollectionStart } = this.props
+const ShopPage = ({ match, fetchCollectionStart }) => {
+//By default useEffect triggered => first time component mounted, state changed, parent component state changed
+    useEffect(() => {
         fetchCollectionStart()
-    }
-
-    render() {
-        const { match } = this.props//match,locatiion,history sent as props by default while using Route
-        return (
-            <div className="shop-page">
-                <Route exact path={`${match.path}`} component={CollectionOverviewContainer} />
-                <Route path={`${match.path}/:collectionId`} component={CollectionPageContainer} />
-            </div>
-        )
-    }
+    },[fetchCollectionStart])//triggered only when fetchCollectionStart changes
+    //match,locatiion,history sent as props by default while using Route
+    return (
+        <div className="shop-page">
+            <Route exact path={`${match.path}`} component={CollectionOverviewContainer} />
+            <Route path={`${match.path}/:collectionId`} component={CollectionPageContainer} />
+        </div>
+    )
 }
 
 const mapDispatchToProps = dispatch => ({
