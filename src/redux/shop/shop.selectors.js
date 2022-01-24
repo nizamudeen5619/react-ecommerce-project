@@ -8,24 +8,24 @@ export const selectShopCollections = createSelector(
     (shop) => shop.collections
 )
 
-export const selectCollectionsForPreview=createSelector(
+export const selectCollectionsForPreview = createSelector(
     [selectShopCollections],
-        [selectShopCollections],
-    collections=> collections?Object.values(collections):[]//convert object of objects into array of objects 
+    [selectShopCollections],
+    collections => collections ? Object.values(collections) : []//convert object of objects into array of objects 
 )
 
 export const selectCollection = memoize((collectionUrlParam) =>//use hash tables instead of array
     createSelector(
         [selectShopCollections],
-        collections => collections?collections[collectionUrlParam]:null
-))
+        collections => collections ? collections[collectionUrlParam] : null
+    ))
 
-export const selectColllectionFetching=createSelector(
+export const selectColllectionFetching = createSelector(
     [selectShop],
-    shop=>shop.isFetching
+    shop => shop.isFetching
 )
 
-export const selectCollectionsLoaded=createSelector(
+export const selectCollectionsLoaded = createSelector(
     [selectShop],
-    shop=>!!shop.collections
+    shop => !!shop.collections
 )

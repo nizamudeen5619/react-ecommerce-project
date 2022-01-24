@@ -10,10 +10,10 @@ import { fetchCollectionStart } from '../../redux/shop/shop.actions';
 import './shop.styles.scss'
 
 const ShopPage = ({ match, fetchCollectionStart }) => {
-//By default useEffect triggered => first time component mounted, state changed, parent component state changed
+    //By default useEffect triggered => first time component mounted, state changed, parent component state changed
     useEffect(() => {
         fetchCollectionStart()
-    },[fetchCollectionStart])//triggered only when fetchCollectionStart changes
+    }, [fetchCollectionStart])//triggered only when fetchCollectionStart changes
     //match,locatiion,history sent as props by default while using Route
     return (
         <div className="shop-page">
